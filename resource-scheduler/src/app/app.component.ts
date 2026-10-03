@@ -5,13 +5,11 @@ import {createCalendar, createViewDay, createViewMonthGrid, createViewWeek} from
 import {createInteractiveEventModal} from '@sx-premium/interactive-event-modal';
 import {createEventsServicePlugin} from '@schedule-x/event-recurrence'; // can alternatively be added in your angular.json
 import {createConfig, createHourlyView, createDailyView} from '@sx-premium/resource-scheduler';
+import 'temporal-polyfill/global';
 
-import '@schedule-x/theme-default/dist/index.css'
-import '@sx-premium/interactive-event-modal/index.css'
-import '@sx-premium/resource-scheduler/index.css'
 
 let viewConfig = createConfig();
-viewConfig.resources.value = [
+const resources = [
   {
     id: 'red',
     label: 'Resource 1',
@@ -40,12 +38,16 @@ viewConfig.resources.value = [
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'angular-example';
+  title = 'angular-resource-scheduler';
 
   eventsService = createEventsServicePlugin()
 
   modalPlugin = createInteractiveEventModal({
     eventsService: this.eventsService,
+
+    onAddEvent: (event) => {
+      console.log('onAddEvent', event)
+    },
 
     fields: {
       title: {
@@ -79,22 +81,22 @@ export class AppComponent {
       {
         id: '1',
         title: 'Event 1',
-        start: '2025-01-01 02:00',
-        end: '2025-01-01 04:00',
+        start: Temporal.ZonedDateTime.from('2025-01-01T02:00:00+00:00[UTC]'),
+        end: Temporal.ZonedDateTime.from('2025-01-01T04:00:00+00:00[UTC]'),
         resourceId: 'red'
       },
       {
         id: '2',
         title: 'Event 2',
-        start: '2025-01-01 06:00',
-        end: '2025-01-01 08:00',
+        start: Temporal.ZonedDateTime.from('2025-01-01T06:00:00+00:00[UTC]'),
+        end: Temporal.ZonedDateTime.from('2025-01-01T08:00:00+00:00[UTC]'),
         resourceId: '2'
       },
       {
         id: '3',
         title: 'Event 3',
-        start: '2025-01-01 10:00',
-        end: '2025-01-01 12:00',
+        start: Temporal.ZonedDateTime.from('2025-01-01T10:00:00+00:00[UTC]'),
+        end: Temporal.ZonedDateTime.from('2025-01-01T12:00:00+00:00[UTC]'),
         resourceId: '3'
       }
     ],
@@ -102,6 +104,8 @@ export class AppComponent {
       this.hourlyView,
       this.dailyView,
     ],
-    selectedDate: '2025-01-01'
+    selectedDate: Temporal.PlainDate.from('2025-01-01'),
+    timezone: 'UTC',
+    resources,
   })
 }

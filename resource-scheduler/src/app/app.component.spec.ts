@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'interactive-event-modal' title`, () => {
+  it(`should have the 'angular-resource-scheduler' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('interactive-event-modal');
+    expect(app.title).toEqual('angular-resource-scheduler');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, interactive-event-modal');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Calendar');
   });
 });
