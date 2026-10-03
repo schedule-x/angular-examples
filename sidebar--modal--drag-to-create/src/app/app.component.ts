@@ -6,12 +6,8 @@ import {createInteractiveEventModal} from '@sx-premium/interactive-event-modal';
 import {createEventsServicePlugin} from '@schedule-x/event-recurrence'; // can alternatively be added in your angular.json
 import {createSidebarPlugin} from '@sx-premium/sidebar';
 import {createDragToCreatePlugin} from '@sx-premium/drag-to-create';
+import 'temporal-polyfill/global';
 
-import '@schedule-x/theme-default/dist/calendar.css'
-import '@sx-premium/sidebar/index.css'
-import '@sx-premium/interactive-event-modal/index.css'
-import '@schedule-x/theme-default/dist/time-picker.css'
-import '@sx-premium/drag-to-create/index.css'
 import {
   calendars,
   NAME_CALENDAR_INTERNAL,
@@ -27,12 +23,16 @@ import {
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'angular-example';
+  title = 'angular-sidebar-modal-drag-to-create';
 
   eventsService = createEventsServicePlugin()
 
   modalPlugin = createInteractiveEventModal({
     eventsService: this.eventsService,
+
+    onAddEvent: (event) => {
+      console.log('onAddEvent', event)
+    },
 
     fields: {
       title: {
@@ -94,10 +94,12 @@ export class AppComponent {
       {
         id: '1',
         title: 'Event 1',
-        start: '2024-06-11 03:00',
-        end: '2024-06-11 05:00',
+        start: Temporal.ZonedDateTime.from('2024-06-11T03:00:00+00:00[UTC]'),
+        end: Temporal.ZonedDateTime.from('2024-06-11T05:00:00+00:00[UTC]'),
       },
     ],
+    selectedDate: Temporal.PlainDate.from('2024-06-11'),
+    timezone: 'UTC',
     views: [createViewWeek(), createViewMonthGrid(), createViewDay()],
     callbacks: {
       onDoubleClickDateTime: (dateTime) => {
